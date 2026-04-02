@@ -14,14 +14,13 @@ Ns=Fe/Rb;
 %Réponse impulsionnelle du filtre de mise en forme
 h=ones(1,Ns);
 %Réponse impulsionnelle du filtre de réception
-hr=fliplr(h);
+hr=fliplr([ones(1, Ns/2), zeros(1, Ns/2)]);
 %Valeurs de Eb/N0 à tester
 tab_Eb_sur_N0_dB=[0:8];
 N_bit_block = 1000;
 TEB_simu = zeros(1, length(tab_Eb_sur_N0_dB))
-%TEB THEORIQUE
-TEB_th = zeros(1, length(tab_Eb_sur_N0_dB))
 
+TEB_th = zeros(1, length(tab_Eb_sur_N0_dB))
 %BOUCLE SUR LES VALEURS DE Eb/N0
 for indice_Eb_sur_N0=0:length(tab_Eb_sur_N0_dB)-1
     %Valeur testée
@@ -75,14 +74,13 @@ for indice_Eb_sur_N0=0:length(tab_Eb_sur_N0_dB)-1
         nb_erreurs=nb_erreurs+ sum(bits ~= bits_decides);
         compteur=compteur+1;
     end
-    %Update du TEB théorique
     TEB_th(indice_Eb_sur_N0+1) = Pb;
     TEB_simu_cumul=nb_erreurs/N_bit_block;
     %TEB SIMULE POUR LA VALEUR TESTEE DE Eb/N0
     TEB_simu(indice_Eb_sur_N0+1)= TEB_simu_cumul/compteur;
 end
 
-
+%TEB THEORIQUE
 
 %TRACES DES TEBs THEORIQUE ET SIMULE
 figure
